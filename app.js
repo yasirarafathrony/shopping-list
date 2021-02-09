@@ -1,4 +1,28 @@
 
+
+// Search for items
+const SEARCH = document.forms['search-item'].querySelector('input');
+SEARCH.addEventListener('keyup', (e)=>{
+    let text = e.target.value.toLowerCase();
+    //console.log(text);
+    let groceryList = document.querySelector('#grocery-list ul');
+    let groceries = groceryList.getElementsByTagName('li');
+
+    let groceriesArray = Array.from(groceries);
+    groceriesArray.forEach((grocery) =>{
+        let groceryName = grocery.firstElementChild.textContent;
+        //console.log(groceryName);
+        groceryNameLower = groceryName.toLocaleLowerCase();
+
+        if(groceryNameLower.indexOf(text) == -1){
+            grocery.style.display = 'none';
+        } else {
+            grocery.style.display = 'block';
+        }
+    })
+})
+
+
 // Show and hide items
 let checkbox = document.querySelector('#hide');
 checkbox.addEventListener('change', (e)=>{
@@ -19,6 +43,9 @@ formAdd.addEventListener('submit', (e) =>{
     e.preventDefault();
     let text = formAdd.querySelector('input[type="text"]').value;
     // console.log(text);
+
+    //Clear input box
+    formAdd.querySelector('input').value = null;
 
     // creating list items
     let li = document.createElement('li');
@@ -51,4 +78,44 @@ function remove(e){
        let li = target.parentElement;
        li.remove();
     }
+}
+
+//Tabs
+let headings = document.querySelector('.heading');
+let panels = document.querySelectorAll('.panel')
+
+let selectedPanel = null ;
+
+headings.addEventListener('click', (e) =>{
+    let target = e.target;
+    let dataAttribute = e.target.dataset.clicked;
+
+    if(target.tagName == "LI"){
+        if(selectedPanel !=null){
+            selectedPanel.classList.toggle('selected');
+        }
+
+        selectedPanel = target;
+        selectedPanel.classList.toggle('selected');
+
+        // Finding the panel to show
+        let targetPanel = document.querySelector(dataAttribute);
+        panels.forEach((panel) =>{
+            if(panel == targetPanel){
+                panel.classList.add('active');
+            } else{
+                panel.classList.remove('active');
+            }
+        })
+    }
+})
+
+//Button to display the answer
+let answerButton = document.getElementById('showAnswer');
+answerButton.addEventListener('click', answer);
+
+function answer(){
+    document.getElementById('answer').classList.add('show');
+    document.getElementById('answer').textContent = "An Impasta";
+    answerButton.style.display = 'none';
 }
